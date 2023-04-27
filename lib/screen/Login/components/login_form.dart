@@ -1,3 +1,4 @@
+import 'package:edutrack/client/edutrack_client.dart';
 import 'package:edutrack/screen/Dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,11 @@ import '../../../constants.dart';
 import '../../Signup/signup_screen.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({
+  final TextEditingController unameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final EdutrackClient client = EdutrackClient();
+
+  LoginForm({
     Key? key,
   }) : super(key: key);
 
@@ -16,6 +21,7 @@ class LoginForm extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
+            controller: unameController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
@@ -31,6 +37,7 @@ class LoginForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
+              controller: passwordController,
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
@@ -48,14 +55,24 @@ class LoginForm extends StatelessWidget {
             tag: "login_btn",
             child: ElevatedButton(
               onPressed: () {
+                client.authenticate(unameController.text, passwordController.text).then((value) =>
+                {
+                  if (value == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Failed to login"),
+                    ))
+                  } else {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DashboardScreen();
-                    },
-                  ),
-                );
+                context,
+                MaterialPageRoute(
+                builder: (context) {
+                return DashboardScreen();
+                },
+                ),
+                )
+                  }
+
+                });
               },
               child: Text(
                 "Login".toUpperCase(),
