@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:edutrack/client/AuthResult.dart';
 
-final dio = Dio();
+final dio = Dio()
 
 class EdutrackClient {
  Future<AuthResult?> authenticate(String username, String password) async {
